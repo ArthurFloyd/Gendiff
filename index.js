@@ -4,9 +4,9 @@ import fs from 'fs';
 
 const genDiff = (data1 = {}, data2 = {}) => {
   const keys = _.union(_.keys(data1), _.keys(data2));
-  const sortedKeys = keys.sort();
+  const sortKeys = keys.sort();
   let result = '{\n';
-  for (const key of sortedKeys) {
+  sortKeys.forEach((key) => {
     if (!Object.hasOwn(data1, key)) {
       result += `  + ${key}: ${data2[key]}\n`;
     } else if (!Object.hasOwn(data2, key)) {
@@ -17,7 +17,7 @@ const genDiff = (data1 = {}, data2 = {}) => {
     } else {
       result += `    ${key}: ${data1[key]}\n`;
     }
-  }
+  });
   result += '}';
   return result;
 };
