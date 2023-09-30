@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 import fs from 'fs';
 import { genDiff } from '../index.js';
+import _ from '../../../../__tests__/lodash';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -10,8 +11,8 @@ const getFixturePath = (filename) => path.resolve(__dirname, '..', '__fixtures__
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename));
 
 test('comparing two JSON files', () => {
-  const txt = readFile('gendiff.txt');
+  const txt = readFile('gendiff.txt').toString();
   const json1 = JSON.parse(readFile('file1.json'));
   const json2 = JSON.parse(readFile('file2.json'));
-  expect(genDiff(json1, json2)).toBe(txt.toString());
+  expect(genDiff(json1, json2)).toBe(txt);
 });
