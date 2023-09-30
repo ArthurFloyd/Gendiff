@@ -10,8 +10,8 @@ program
   .argument('<filepath1>')
   .argument('<filepath2>')
   .action((filepath1, filepath2) => {
-    const json1 = findFileAndConvertToJson(filepath1);
-    const json2 = findFileAndConvertToJson(filepath2);
+    const json1 = findFileAndConvertToJson(filepath1, '__fixtures__');
+    const json2 = findFileAndConvertToJson(filepath2, '__fixtures__');
     const result = genDiff(json1, json2);
 
     console.log(result);
