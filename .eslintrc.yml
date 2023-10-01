@@ -11,5 +11,6 @@ rules:
     - error
     - ignorePackages
     - js: always
+    - jest: true
     # - test.js: always
   no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]

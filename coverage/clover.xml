@@ -1,29 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1696157549477" clover="3.2.0">
-  <project timestamp="1696157549477" name="All files">
-    <metrics statements="20" coveredstatements="16" conditionals="6" coveredconditionals="6" methods="3" coveredmethods="2" elements="29" coveredelements="24" complexity="0" loc="20" ncloc="20" packages="1" files="1" classes="1"/>
-    <file name="index.js" path="/Users/arthur/frontend-project-46/index.js">
-      <metrics statements="20" coveredstatements="16" conditionals="6" coveredconditionals="6" methods="3" coveredmethods="2"/>
-      <line num="6" count="1" type="stmt"/>
-      <line num="7" count="2" type="stmt"/>
-      <line num="8" count="2" type="stmt"/>
-      <line num="9" count="2" type="stmt"/>
-      <line num="10" count="2" type="stmt"/>
-      <line num="11" count="10" type="cond" truecount="2" falsecount="0"/>
-      <line num="12" count="2" type="stmt"/>
-      <line num="13" count="8" type="cond" truecount="2" falsecount="0"/>
-      <line num="14" count="4" type="stmt"/>
-      <line num="15" count="4" type="cond" truecount="2" falsecount="0"/>
-      <line num="16" count="2" type="stmt"/>
-      <line num="17" count="2" type="stmt"/>
-      <line num="19" count="2" type="stmt"/>
-      <line num="22" count="2" type="stmt"/>
-      <line num="23" count="2" type="stmt"/>
-      <line num="26" count="1" type="stmt"/>
-      <line num="27" count="0" type="stmt"/>
-      <line num="28" count="0" type="stmt"/>
-      <line num="29" count="0" type="stmt"/>
-      <line num="31" count="0" type="stmt"/>
-    </file>
+<coverage generated="1696158445158" clover="3.2.0">
+  <project timestamp="1696158445159" name="All files">
+    <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0" elements="0" coveredelements="0" complexity="0" loc="0" ncloc="0" packages="0" files="0" classes="0"/>
   </project>
 </coverage>
