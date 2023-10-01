@@ -13,6 +13,6 @@ test('comparing two JSON files', () => {
   const txt = readFile('gendiff.txt').toString();
   const json1 = JSON.parse(readFile('file1.json'));
   const json2 = JSON.parse(readFile('file2.json'));
-  console.log(txt, json1, json2, genDiff(json1, json2))
+  console.log(txt, json1, json2, genDiff(json1, json2));
   expect(genDiff(json1, json2)).toBe(txt);
 });

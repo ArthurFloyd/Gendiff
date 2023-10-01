@@ -8,8 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
-    "coverage": "NODE_OPTIONS=--experimental-vm-modules npx jest --coverage"
+    "test": "jest"
   },
   "author": "ArthurFloyd",
   "license": "ISC",
