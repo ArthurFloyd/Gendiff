@@ -2,13 +2,14 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "type": "module",
-  "description": "second project",
+  "description": "Compares two configuration files and shows a difference.",
   "bin": {
     "gendiff": "bin/gendiff.js"
   },
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
+    "coverage": "NODE_OPTIONS=--experimental-vm-modules npx jest --coverage"
   },
   "author": "ArthurFloyd",
   "license": "ISC",
