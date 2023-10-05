@@ -2,7 +2,6 @@ env:
   browser: true
   jest: true
   es2021: true
-  # yaml: true
 extends: 
   - 'airbnb-base'
 parserOptions:
