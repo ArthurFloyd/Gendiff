@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { program } from 'commander';
-import { genDiff, findFile } from '../index.js';
+import { findFile } from '../index.js';
 import getParse from '../parsers.js';
+import { genDiff, stylish } from '../testaaaa.js';
 
 program
   .name('gendiff')
@@ -15,7 +16,7 @@ program
     const absolutePath2 = findFile(filepath2, '__fixtures__');
     const file1 = getParse(absolutePath1);
     const file2 = getParse(absolutePath2);
-    const result = genDiff(file1, file2);
+    const result = stylish(genDiff(file1, file2));
 
     console.log(result);
   });

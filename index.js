@@ -2,7 +2,7 @@ import _ from 'lodash';
 import path from 'path';
 import { cwd } from 'node:process';
 
-const genDiff = (data1, data2) => {
+const findFlatFileDifference = (data1, data2) => {
   const keys = _.union(_.keys(data1), _.keys(data2));
   const sortKeys = keys.sort();
   let result = '{\n';
@@ -19,9 +19,10 @@ const genDiff = (data1, data2) => {
     }
   });
   result += '}';
+
   return result;
 };
 
 const findFile = (pathToFile, directory) => path.resolve(cwd(), directory, pathToFile);
 
-export { genDiff, findFile };
+export { findFlatFileDifference, findFile };
