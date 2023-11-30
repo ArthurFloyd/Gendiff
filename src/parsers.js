@@ -1,7 +1,7 @@
 import fs from 'fs';
 import yaml from 'js-yaml';
 
-const getParse = (absolutePath) => {
+const getParsePathFile = (absolutePath) => {
   const format = absolutePath;
   const data = fs.readFileSync(absolutePath);
 
@@ -15,4 +15,4 @@ const getParse = (absolutePath) => {
   }
 };
 
-export default getParse;
+export default getParsePathFile;
