@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import path from 'path';
 import { cwd } from 'node:process';
-import stylish from './formaters/stylish.js';
-import plain from './formaters/plain.js';
+import stylish from './formatters/stylish.js';
+import plain from './formatters/plain.js';
 
 const makeAstTree = (firstConfig, secondConfig) => {
   const keys = _.union(_.keys(firstConfig), _.keys(secondConfig));
