@@ -33,7 +33,7 @@ const stylish = (diffTree, replacer = '    ', spacesCount = 1) => {
         lines.push(`${indentation.slice(2)}+ ${key}: ${stringify(value[1], spacesCount)}`);
         break;
       case 'unchanged':
-        lines.push(`${indentation}${key}: ${stringify(value, 1)}`);
+        lines.push(`${indentation}${key}: ${stringify(value, spacesCount)}`);
         break;
       default:
         throw new Error(`Unknown status: '${status}'!`);
