@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import path from 'path';
 import { cwd } from 'node:process';
-import stylish from './formatters/stylish.js';
-import plain from './formatters/plain.js';
 
 const makeAstTree = (firstConfig, secondConfig) => {
   const keys = _.union(_.keys(firstConfig), _.keys(secondConfig));
@@ -24,20 +22,6 @@ const makeAstTree = (firstConfig, secondConfig) => {
   return diffTree;
 };
 
-const genearateDiff = (firstConfig = {}, secondConfig = {}, format = 'stylish') => {
-  const diffTree = makeAstTree(firstConfig, secondConfig);
-  switch (format) {
-    case 'plain':
-      return plain(diffTree);
-    case 'stylish':
-      return stylish(diffTree);
-    case 'json':
-      return JSON.stringify(diffTree, '', 1);
-    default:
-      throw new Error(`Unknown format: '${format}'!`);
-  }
-};
-
 const findFile = (pathToFile, directory) => path.resolve(cwd(), directory, pathToFile);
 
-export { genearateDiff, findFile };
+export { makeAstTree, findFile };
