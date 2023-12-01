@@ -129,6 +129,8 @@ Stylish format:
     }
 }
 ```
+[![asciicast](https://asciinema.org/a/lCFa8Opnbrsta4shzUygMYvEG.svg)](https://asciinema.org/a/lCFa8Opnbrsta4shzUygMYvEG)
+
 Plain format:
 ```
 Property 'common.follow' was added with value: false
@@ -143,6 +145,8 @@ Property 'group1.nest' was updated. From [complex value] to 'str'
 Property 'group2' was removed
 Property 'group3' was added with value: [complex value]
 ```
+[![asciicast](https://asciinema.org/a/xEwdvQXimNBL3CgVNwticcl8o.svg)](https://asciinema.org/a/xEwdvQXimNBL3CgVNwticcl8o)
+
 JSON format:
 ```
 [
@@ -270,6 +274,8 @@ JSON format:
  }
 ]
 ```
+[![asciicast](https://asciinema.org/a/obOM4rhEGVKbpmlVDOq2iqdCk.svg)](https://asciinema.org/a/obOM4rhEGVKbpmlVDOq2iqdCk)
+
 ## How to setup
 Fist you need to build app with:
 ```
@@ -299,6 +305,8 @@ gendiff <filepath1> <filepath2>
   -f, --format <type>  output format (default: "stylish")
   -h, --help           display help for command
 ```
+[![asciicast](https://asciinema.org/a/qRPck4LzFjjyr5zKjxOVTBWES.svg)](https://asciinema.org/a/qRPck4LzFjjyr5zKjxOVTBWES)
+
 ### Formats
 - `stylish`, output diff with `+ / -` , like `git diff` (default format)
 - `plain`, output diff as text strings
