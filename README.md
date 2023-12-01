@@ -1,5 +1,315 @@
-# nodejs-package
+# Gendiff
+Console-based Node.js app for generating diff between config files. Supported formats: JSON, YAML.
+
 [![Actions Status](https://github.com/ArthurFloyd/frontend-project-46/workflows/hexlet-check/badge.svg)](https://github.com/ArthurFloyd/frontend-project-46/actions)
 [![Action-check](https://github.com/ArthurFloyd/frontend-project-46/actions/workflows/action-check.yml/badge.svg)](https://github.com/ArthurFloyd/frontend-project-46/actions/workflows/action-check.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b38ae6aa03684cd9abaf/maintainability)](https://codeclimate.com/github/ArthurFloyd/frontend-project-46/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/b38ae6aa03684cd9abaf/test_coverage)](https://codeclimate.com/github/ArthurFloyd/frontend-project-46/test_coverage)
+
+## How it works
+
+The application detects file format based on its extension. It converts config to an object structure (AST), same for different formats.  
+Then the app creates a diff by comparing the ASTs recursively with a function. Finally, the app renders diff in the selected `format` to the console.
+
+## Examples
+
+### Config files
+
+First config:
+```
+{
+  "common": {
+    "setting1": "Value 1",
+    "setting2": 200,
+    "setting3": true,
+    "setting6": {
+      "key": "value",
+      "doge": {
+        "wow": ""
+      }
+    }
+  },
+  "group1": {
+    "baz": "bas",
+    "foo": "bar",
+    "nest": {
+      "key": "value"
+    }
+  },
+  "group2": {
+    "abc": 12345,
+    "deep": {
+      "id": 45
+    }
+  }
+}
+}
+```
+Second config:
+```
+{
+  "common": {
+    "follow": false,
+    "setting1": "Value 1",
+    "setting3": null,
+    "setting4": "blah blah",
+    "setting5": {
+      "key5": "value5"
+    },
+    "setting6": {
+      "key": "value",
+      "ops": "vops",
+      "doge": {
+        "wow": "so much"
+      }
+    }
+  },
+  "group1": {
+    "foo": "bar",
+    "baz": "bars",
+    "nest": "str"
+  },
+  "group3": {
+    "deep": {
+      "id": {
+        "number": 45
+      }
+    },
+    "fee": 100500
+  }
+}
+```
+
+### Output
+
+Stylish format:
+```
+{
+    common: {
+      + follow: false
+        setting1: Value 1
+      - setting2: 200
+      - setting3: true
+      + setting3: null
+      + setting4: blah blah
+      + setting5: {
+            key5: value5
+        }
+        setting6: {
+            doge: {
+              - wow: 
+              + wow: so much
+            }
+            key: value
+          + ops: vops
+        }
+    }
+    group1: {
+      - baz: bas
+      + baz: bars
+        foo: bar
+      - nest: {
+            key: value
+        }
+      + nest: str
+    }
+  - group2: {
+        abc: 12345
+        deep: {
+            id: 45
+        }
+    }
+  + group3: {
+        deep: {
+            id: {
+                number: 45
+            }
+        }
+        fee: 100500
+    }
+}
+```
+Plain format:
+```
+Property 'common.follow' was added with value: false
+Property 'common.setting2' was removed
+Property 'common.setting3' was updated. From true to null
+Property 'common.setting4' was added with value: 'blah blah'
+Property 'common.setting5' was added with value: [complex value]
+Property 'common.setting6.doge.wow' was updated. From '' to 'so much'
+Property 'common.setting6.ops' was added with value: 'vops'
+Property 'group1.baz' was updated. From 'bas' to 'bars'
+Property 'group1.nest' was updated. From [complex value] to 'str'
+Property 'group2' was removed
+Property 'group3' was added with value: [complex value]
+```
+JSON format:
+```
+[
+ {
+  "key": "common",
+  "value": [
+   {
+    "key": "follow",
+    "value": false,
+    "status": "added"
+   },
+   {
+    "key": "setting1",
+    "value": "Value 1",
+    "status": "unchanged"
+   },
+   {
+    "key": "setting2",
+    "value": 200,
+    "status": "deleted"
+   },
+   {
+    "key": "setting3",
+    "value": [
+     true,
+     null
+    ],
+    "status": "changed"
+   },
+   {
+    "key": "setting4",
+    "value": "blah blah",
+    "status": "added"
+   },
+   {
+    "key": "setting5",
+    "value": {
+     "key5": "value5"
+    },
+    "status": "added"
+   },
+   {
+    "key": "setting6",
+    "value": [
+     {
+      "key": "doge",
+      "value": [
+       {
+        "key": "wow",
+        "value": [
+         "",
+         "so much"
+        ],
+        "status": "changed"
+       }
+      ],
+      "status": "nested"
+     },
+     {
+      "key": "key",
+      "value": "value",
+      "status": "unchanged"
+     },
+     {
+      "key": "ops",
+      "value": "vops",
+      "status": "added"
+     }
+    ],
+    "status": "nested"
+   }
+  ],
+  "status": "nested"
+ },
+ {
+  "key": "group1",
+  "value": [
+   {
+    "key": "baz",
+    "value": [
+     "bas",
+     "bars"
+    ],
+    "status": "changed"
+   },
+   {
+    "key": "foo",
+    "value": "bar",
+    "status": "unchanged"
+   },
+   {
+    "key": "nest",
+    "value": [
+     {
+      "key": "value"
+     },
+     "str"
+    ],
+    "status": "changed"
+   }
+  ],
+  "status": "nested"
+ },
+ {
+  "key": "group2",
+  "value": {
+   "abc": 12345,
+   "deep": {
+    "id": 45
+   }
+  },
+  "status": "deleted"
+ },
+ {
+  "key": "group3",
+  "value": {
+   "deep": {
+    "id": {
+     "number": 45
+    }
+   },
+   "fee": 100500
+  },
+  "status": "added"
+ }
+]
+```
+## How to setup
+Fist you need to build app with:
+```
+make install
+
+npm link
+```
+
+Then you can run app:
+
+### Description
+Compares two configuration files and shows a difference.
+
+### Minimum system requirements
+
+__Operating system:__ macOC Ventura 13.2
+
+__Node.js:__ v20.3.1
+
+### Usage
+```
+gendiff <filepath1> <filepath2>
+```
+### Options
+```
+  -V, --version        output the version number
+  -f, --format <type>  output format (default: "stylish")
+  -h, --help           display help for command
+```
+### Formats
+- `stylish`, output diff with `+ / -` , like `git diff` (default format)
+- `plain`, output diff as text strings
+- `json`, output diff in JSON format
+
+## Testing
+
+Tests are made with Jest.
+
+Run tests with:
+```
+make test
+```
+Config files and results for tests in `__tests__ and __fixtures__`.
