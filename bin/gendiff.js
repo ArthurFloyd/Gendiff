@@ -14,7 +14,6 @@ program
   .action((filepath1, filepath2) => {
     const absolutePath1 = findFile(filepath1, '__fixtures__');
     const absolutePath2 = findFile(filepath2, '__fixtures__');
-    console.log(absolutePath1);
     const file1 = getParsePathFile(absolutePath1);
     const file2 = getParsePathFile(absolutePath2);
     console.log(genearateDiff(file1, file2, program.opts().format));

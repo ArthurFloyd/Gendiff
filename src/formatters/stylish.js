@@ -1,46 +1,41 @@
 import _ from 'lodash';
 
-const stringify = (data, depth) => {
-  if (!_.isObject(data)) {
-    return `${data}`;
+const stringify = (value, depth) => {
+  if (!_.isObject(value)) {
+    return `${value}`;
   }
-  const repeat = '    '.repeat(depth + 1);
-  const line = Object.entries(data).map(([key, val]) => {
+  const valueSpaceCount = '    '.repeat(depth + 1);
+  const line = Object.entries(value).map(([key, val]) => {
     const preparedValue = stringify(val, depth + 1);
-    return `${repeat}${key}: ${preparedValue}`;
+    return `${valueSpaceCount}${key}: ${preparedValue}`;
   });
-  const outRepeat = '    '.repeat(depth);
-  const rawResult = ['{', ...line, `${outRepeat}}`].join('\n');
-  return rawResult;
+  const closeObjectSpaceCount = '    '.repeat(depth);
+  return ['{', ...line, `${closeObjectSpaceCount}}`].join('\n');
 };
 
-const stylish = (diffTree, replacer = '    ', spacesCount = 1) => {
-  const lines = [];
-  const indentation = replacer.repeat(spacesCount);
-  diffTree.forEach(({ key, value, status }) => {
-    switch (status) {
+const stylish = (diffTree, replacer = '    ', depth = 1) => {
+  const initialIndent = replacer.repeat(depth).slice(2);
+  const result = diffTree.flatMap((node) => {
+    switch (node.status) {
       case 'nested':
-        lines.push(`${indentation}${key}: ${stylish(value, replacer, spacesCount + 1)}`);
-        break;
+        return `${initialIndent}  ${node.key}: ${stylish(node.children, replacer, depth + 1)}`;
       case 'added':
-        lines.push(`${indentation.slice(2)}+ ${key}: ${stringify(value, spacesCount)}`);
-        break;
+        return `${initialIndent}+ ${node.key}: ${stringify(node.value, depth)}`;
       case 'deleted':
-        lines.push(`${indentation.slice(2)}- ${key}: ${stringify(value, spacesCount)}`);
-        break;
+        return `${initialIndent}- ${node.key}: ${stringify(node.value, depth)}`;
       case 'changed':
-        lines.push(`${indentation.slice(2)}- ${key}: ${stringify(value[0], spacesCount)}`);
-        lines.push(`${indentation.slice(2)}+ ${key}: ${stringify(value[1], spacesCount)}`);
-        break;
+        return [
+          `${initialIndent}- ${node.key}: ${stringify(node.oldValue, depth)}`,
+          `${initialIndent}+ ${node.key}: ${stringify(node.newValue, depth)}`,
+        ];
       case 'unchanged':
-        lines.push(`${indentation}${key}: ${stringify(value, spacesCount)}`);
-        break;
+        return `${initialIndent}  ${node.key}: ${stringify(node.value, depth)}`;
       default:
-        throw new Error(`Unknown status: '${status}'!`);
+        throw new Error(`Unknown status: '${node.status}'!`);
     }
   });
-  const outRepeat = replacer.repeat(spacesCount - 1);
-  return ['{', ...lines, `${outRepeat}}`].join('\n');
+  const outRepeat = replacer.repeat(depth - 1);
+  return ['{', ...result, `${outRepeat}}`].join('\n');
 };
 
 export default stylish;
