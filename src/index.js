@@ -3,9 +3,8 @@ import path from 'path';
 import { cwd } from 'node:process';
 
 const makeAstTree = (beforeConfig, afterConfig) => {
-  const fileKeys = _.union(_.keys(beforeConfig), _.keys(afterConfig));
-  const sortFileKeys = fileKeys.sort();
-  const result = sortFileKeys.map((key) => {
+  const fileKeys = _.union(_.keys(beforeConfig), _.keys(afterConfig)).sort();
+  const result = fileKeys.map((key) => {
     if (!_.has(afterConfig, key)) {
       return { key, status: 'deleted', value: beforeConfig[key] };
     }
