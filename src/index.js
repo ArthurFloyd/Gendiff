@@ -2,33 +2,24 @@ import _ from 'lodash';
 import path from 'path';
 import { cwd } from 'node:process';
 
-const makeAstTree = (beforeConfig, afterConfig) => {
-  const fileKeys = _.union(_.keys(beforeConfig), _.keys(afterConfig));
-  const sortFileKeys = fileKeys.sort();
-  const result = sortFileKeys.map((key) => {
-    if (!_.has(afterConfig, key)) {
-      return { key, status: 'deleted', value: beforeConfig[key] };
+const makeAstTree = (firstConfig, secondConfig) => {
+  const keys = _.union(_.keys(firstConfig), _.keys(secondConfig));
+  const sortKeys = keys.sort();
+  const diffTree = [];
+  sortKeys.forEach((key) => {
+    if (_.isObject(firstConfig[key]) && _.isObject(secondConfig[key])) {
+      diffTree.push({ key, value: makeAstTree(firstConfig[key], secondConfig[key]), status: 'nested' });
+    } else if (!Object.hasOwn(firstConfig, key)) {
+      diffTree.push({ key, value: secondConfig[key], status: 'added' });
+    } else if (!Object.hasOwn(secondConfig, key)) {
+      diffTree.push({ key, value: firstConfig[key], status: 'deleted' });
+    } else if (firstConfig[key] !== secondConfig[key]) {
+      diffTree.push({ key, value: [firstConfig[key], secondConfig[key]], status: 'changed' });
+    } else if (firstConfig[key] === secondConfig[key]) {
+      diffTree.push({ key, value: firstConfig[key], status: 'unchanged' });
     }
-    if (!_.has(beforeConfig, key)) {
-      return { key, status: 'added', value: afterConfig[key] };
-    }
-    const oldValue = beforeConfig[key];
-    const newValue = afterConfig[key];
-    if (oldValue === newValue) {
-      return { key, status: 'unchanged', value: oldValue };
-    }
-    if (_.isObject(oldValue) && _.isObject(newValue)) {
-      return { key, status: 'nested', children: makeAstTree(oldValue, newValue) };
-    }
-    const modifiedNode = {
-      key,
-      status: 'changed',
-      oldValue,
-      newValue,
-    };
-    return modifiedNode;
   });
-  return result;
+  return diffTree;
 };
 
 const findFile = (pathToFile, directory) => path.resolve(cwd(), directory, pathToFile);

@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 const planValue = (value) => {
   switch (true) {
     case value === null:
@@ -13,25 +11,33 @@ const planValue = (value) => {
   }
 };
 
-const plain = (tree, parentKey = '') => {
-  const result = tree
-    .filter((node) => node.status !== 'unchanged')
-    .map((node) => {
-      const newProperty = _.trim(`${parentKey}.${node.key}`, '.');
-      switch (node.status) {
-        case 'changed':
-          return `Property '${newProperty}' was updated. From ${planValue(node.oldValue)} to ${planValue(node.newValue)}`;
-        case 'added':
-          return `Property '${newProperty}' was added with value: ${planValue(node.value)}`;
-        case 'deleted':
-          return `Property '${newProperty}' was removed`;
-        case 'nested':
-          return plain(node.children, newProperty);
-        default:
-          throw new Error(`Unknown node status ${node.status}`);
-      }
-    });
-  return result.join('\n');
+const plain = (diffTree, parentKey = '') => {
+  const logs = [];
+  diffTree.forEach(({
+    key, value, status,
+  }) => {
+    const keyNameOriginal = `${parentKey}.${key}`;
+    const keyName = keyNameOriginal.startsWith('.') ? keyNameOriginal.slice(1) : keyNameOriginal;
+    switch (status) {
+      case 'nested':
+        logs.push(plain(value, keyName));
+        break;
+      case 'added':
+        logs.push(`Property '${keyName}' was added with value: ${planValue(value)}`);
+        break;
+      case 'deleted':
+        logs.push(`Property '${keyName}' was removed`);
+        break;
+      case 'changed':
+        logs.push(`Property '${keyName}' was updated. From ${planValue(value[0])} to ${planValue(value[1])}`);
+        break;
+      case 'unchanged':
+        break;
+      default:
+        throw new Error(`Unknown status: '${status}'!`);
+    }
+  });
+  return logs.join('\n');
 };
 
 export default plain;
