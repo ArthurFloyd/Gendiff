@@ -5,14 +5,14 @@ import { cwd } from 'node:process';
 const makeAstTree = (beforeConfig, afterConfig) => {
   const fileKeys = _.union(_.keys(beforeConfig), _.keys(afterConfig)).sort();
   const result = fileKeys.map((key) => {
-    if (!_.has(afterConfig, key)) {
-      return { key, status: 'deleted', value: beforeConfig[key] };
-    }
-    if (!_.has(beforeConfig, key)) {
-      return { key, status: 'added', value: afterConfig[key] };
-    }
     const oldValue = beforeConfig[key];
     const newValue = afterConfig[key];
+    if (!_.has(afterConfig, key)) {
+      return { key, status: 'deleted', value: oldValue };
+    }
+    if (!_.has(beforeConfig, key)) {
+      return { key, status: 'added', value: newValue };
+    }
     if (oldValue === newValue) {
       return { key, status: 'unchanged', value: oldValue };
     }
