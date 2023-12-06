@@ -15,23 +15,25 @@ const stringify = (value, depth, replacer = '    ') => {
 
 const stylish = (diffTree, replacer = '    ', depth = 1) => {
   const initialIndent = replacer.repeat(depth).slice(2);
-  const result = diffTree.flatMap((node) => {
-    switch (node.status) {
+  const result = diffTree.flatMap(({
+    key, value, status, oldValue, newValue, children,
+  }) => {
+    switch (status) {
       case 'nested':
-        return `${initialIndent}  ${node.key}: ${stylish(node.children, replacer, depth + 1)}`;
+        return `${initialIndent}  ${key}: ${stylish(children, replacer, depth + 1)}`;
       case 'added':
-        return `${initialIndent}+ ${node.key}: ${stringify(node.value, depth)}`;
+        return `${initialIndent}+ ${key}: ${stringify(value, depth)}`;
       case 'deleted':
-        return `${initialIndent}- ${node.key}: ${stringify(node.value, depth)}`;
+        return `${initialIndent}- ${key}: ${stringify(value, depth)}`;
       case 'changed':
         return [
-          `${initialIndent}- ${node.key}: ${stringify(node.oldValue, depth)}`,
-          `${initialIndent}+ ${node.key}: ${stringify(node.newValue, depth)}`,
+          `${initialIndent}- ${key}: ${stringify(oldValue, depth)}`,
+          `${initialIndent}+ ${key}: ${stringify(newValue, depth)}`,
         ];
       case 'unchanged':
-        return `${initialIndent}  ${node.key}: ${stringify(node.value, depth)}`;
+        return `${initialIndent}  ${key}: ${stringify(value, depth)}`;
       default:
-        throw new Error(`Unknown status: '${node.status}'!`);
+        throw new Error(`Unknown status: '${status}'!`);
     }
   });
   const outRepeat = replacer.repeat(depth - 1);
