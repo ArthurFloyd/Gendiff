@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import path from 'path';
 import { cwd } from 'node:process';
+import fs from 'fs';
+import render from './formatters/index.js';
+import getParseFile from './parsers.js';
 
 const makeAstTree = (beforeConfig, afterConfig) => {
   const fileKeys = _.union(_.keys(beforeConfig), _.keys(afterConfig)).sort();
@@ -30,6 +33,24 @@ const makeAstTree = (beforeConfig, afterConfig) => {
   return result;
 };
 
-const findFile = (pathToFile, directory) => path.resolve(cwd(), directory, pathToFile);
+const makeFileData = (pathToFile, directory) => {
+  const data = fs.readFileSync(path.resolve(cwd(), directory, pathToFile));
+  const format = _.trim(path.extname(pathToFile), '.');
 
-export { makeAstTree, findFile };
+  return { data, format };
+};
+
+const genDiff = (pathToFile1, pathToFile2, format) => {
+  const beforeConfig = makeFileData(pathToFile1, '__fixtures__');
+  const afterConfig = makeFileData(pathToFile2, '__fixtures__');
+
+  const parseBefore = getParseFile(beforeConfig.format, beforeConfig.data);
+  const parseAfter = getParseFile(afterConfig.format, afterConfig.data);
+
+  const diffTree = makeAstTree(parseBefore, parseAfter);
+  const result = render(diffTree, format);
+
+  return result;
+};
+
+export default genDiff;

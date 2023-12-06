@@ -1,9 +1,7 @@
-import { makeAstTree } from '../index.js';
 import stylish from './stylish.js';
 import plain from './plain.js';
 
-const genearateDiff = (firstConfig = {}, secondConfig = {}, format = 'stylish') => {
-  const diffTree = makeAstTree(firstConfig, secondConfig);
+export default (diffTree, format = 'stylish') => {
   switch (format) {
     case 'plain':
       return plain(diffTree);
@@ -15,5 +13,3 @@ const genearateDiff = (firstConfig = {}, secondConfig = {}, format = 'stylish') 
       throw new Error(`Unknown format: '${format}'!`);
   }
 };
-
-export default genearateDiff;

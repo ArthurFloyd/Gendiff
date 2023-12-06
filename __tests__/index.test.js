@@ -1,49 +1,32 @@
 import { fileURLToPath } from 'url';
-import { join, dirname } from 'path';
+import path, { dirname } from 'path';
 import fs from 'fs';
-import yaml from 'js-yaml';
-import genearateDiff from '../src/formatters/index.js';
+import genDiff from '../src/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const getFixturePath = (filename) => join(__dirname, '..', '__fixtures__', filename);
-const readFile = (filename) => fs.readFileSync(getFixturePath(filename));
+const extention = ['json', 'yml'];
 
-const beforeJson = yaml.load(readFile('before.json'));
-const afterJson = yaml.load(readFile('after.json'));
+describe('gendiff', () => {
+  const stylishTestResult = fs.readFileSync(path.resolve(__dirname, '../__fixtures__/stylishTestResult.txt'), 'utf8');
+  const plainTestResult = fs.readFileSync(path.resolve(__dirname, '../__fixtures__/plainTestResult.txt'), 'utf8');
+  const jsonTestResult = fs.readFileSync(path.resolve(__dirname, '../__fixtures__/jsonTestResult.txt'), 'utf8');
+  describe.each(extention)('compare two %s files', (ext) => {
+    const before = path.resolve(__dirname, `../__fixtures__/before.${ext}`);
+    const after = path.resolve(__dirname, `../__fixtures__/after.${ext}`);
+    const expected = genDiff(before, after);
 
-const beforeYaml = yaml.load(readFile('before.yml'));
-const afterYaml = yaml.load(readFile('after.yml'));
+    test('stylish', () => {
+      expect(expected).toBe(stylishTestResult);
+    });
 
-const stylishTestResult = readFile('stylishTestResult.txt').toString();
-const plainTestResult = readFile('plainTestResult.txt').toString();
-const jsonTestResult = readFile('jsonTestResult.txt').toString();
+    test('plain', () => {
+      expect(genDiff(before, after, 'plain'))
+        .toBe(plainTestResult);
+    });
 
-test('comparing two json files in format stylish', () => {
-  expect(genearateDiff(beforeJson, afterJson))
-    .toBe(stylishTestResult);
-});
-
-test('comparing two yaml files in format stylish', () => {
-  expect(genearateDiff(beforeYaml, afterYaml))
-    .toBe(stylishTestResult);
-});
-
-test('comparing two json files in format plain', () => {
-  expect(genearateDiff(beforeJson, afterJson, 'plain'))
-    .toBe(plainTestResult);
-});
-
-test('comparing two yaml files in format plain', () => {
-  expect(genearateDiff(beforeYaml, afterYaml, 'plain'))
-    .toBe(plainTestResult);
-});
-
-test('comparing two json files in format json', () => {
-  expect(genearateDiff(beforeJson, afterJson, 'json'))
-    .toBe(jsonTestResult);
-});
-
-test('comparing two yaml files in format json', () => {
-  expect(genearateDiff(beforeYaml, afterYaml, 'json'))
-    .toBe(jsonTestResult);
+    test('json', () => {
+      expect(genDiff(before, after, 'json'))
+        .toBe(jsonTestResult);
+    });
+  });
 });

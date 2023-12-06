@@ -1,15 +1,15 @@
 import _ from 'lodash';
 
-const stringify = (value, depth) => {
+const stringify = (value, depth, replacer = '    ') => {
   if (!_.isObject(value)) {
     return `${value}`;
   }
-  const valueSpaceCount = '    '.repeat(depth + 1);
+  const valueSpaceCount = replacer.repeat(depth + 1);
   const line = Object.entries(value).map(([key, val]) => {
     const preparedValue = stringify(val, depth + 1);
     return `${valueSpaceCount}${key}: ${preparedValue}`;
   });
-  const closeObjectSpaceCount = '    '.repeat(depth);
+  const closeObjectSpaceCount = replacer.repeat(depth);
   return ['{', ...line, `${closeObjectSpaceCount}}`].join('\n');
 };
 
