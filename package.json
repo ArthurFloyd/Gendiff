@@ -6,7 +6,7 @@
   "bin": {
     "gendiff": "bin/gendiff.js"
   },
-  "main": "crs/index.js",
+  "main": "./crs/index.js",
   "scripts": {
     "test": "jest"
   },
