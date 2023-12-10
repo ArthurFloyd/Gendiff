@@ -33,7 +33,7 @@ const makeAstTree = (beforeConfig, afterConfig) => {
 };
 
 const makeFileData = (pathToFile) => {
-  const data = fs.readFileSync(path.resolve(`__tests__/__fixtures__/${pathToFile}`));
+  const data = fs.readFileSync(path.resolve(pathToFile));
   const format = _.trim(path.extname(pathToFile), '.');
 
   return { data, format };
