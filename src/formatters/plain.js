@@ -4,10 +4,10 @@ const planValue = (value) => {
   if (_.isObject(value)) {
     return '[complex value]';
   }
-  if (Number.isNaN(Number(value)) || value === '') {
+  if (typeof value === 'string') {
     return `'${value}'`;
   }
-  return value;
+  return `${value}`;
 };
 
 const plain = (tree, parentKey = '') => {

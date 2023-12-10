@@ -4,7 +4,6 @@ import fs from 'fs';
 import genDiff from '../src/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-// console.log(__dirname);
 const extention = ['json', 'yml'];
 
 describe('gendiff', () => {
@@ -12,8 +11,8 @@ describe('gendiff', () => {
   const plainTestResult = fs.readFileSync(path.resolve(`${__dirname}/__fixtures__/plainTestResult.txt`), 'utf8');
   const jsonTestResult = fs.readFileSync(path.resolve(`${__dirname}/__fixtures__/jsonTestResult.txt`), 'utf8');
   describe.each(extention)('compare two %s files', (ext) => {
-    const before = path.resolve(`${__dirname}/__fixtures__/before.${ext}`);
-    const after = path.resolve(`${__dirname}/__fixtures__/after.${ext}`);
+    const before = path.resolve(`/before.${ext}`);
+    const after = path.resolve(`/after.${ext}`);
     const expected = genDiff(before, after);
 
     test('stylish', () => {
