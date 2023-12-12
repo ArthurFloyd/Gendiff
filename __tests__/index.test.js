@@ -1,7 +1,6 @@
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 import fs from 'fs';
-// import { cwd } from 'node:process';
 import genDiff from '../src/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
