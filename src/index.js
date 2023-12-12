@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import path from 'path';
 import fs from 'fs';
+import { cwd } from 'node:process';
 import render from './formatters/index.js';
 import getParseFile from './parsers.js';
 
-const makeAstTree = (beforeConfig, afterConfig) => {
+const makeAst = (beforeConfig, afterConfig) => {
   const fileKeys = _.sortBy(_.union(_.keys(beforeConfig), _.keys(afterConfig)));
   const result = fileKeys.map((key) => {
     const oldValue = beforeConfig[key];
@@ -19,7 +20,7 @@ const makeAstTree = (beforeConfig, afterConfig) => {
       return { key, status: 'unchanged', value: oldValue };
     }
     if (_.isObject(oldValue) && _.isObject(newValue)) {
-      return { key, status: 'nested', children: makeAstTree(oldValue, newValue) };
+      return { key, status: 'nested', children: makeAst(oldValue, newValue) };
     }
     const modifiedNode = {
       key,
@@ -33,7 +34,7 @@ const makeAstTree = (beforeConfig, afterConfig) => {
 };
 
 const makeFileData = (pathToFile) => {
-  const data = fs.readFileSync(path.resolve(pathToFile));
+  const data = fs.readFileSync(path.resolve(cwd(), '__tests__/__fixtures__', pathToFile));
   const format = _.trim(path.extname(pathToFile), '.');
 
   return { data, format };
@@ -46,7 +47,7 @@ const genDiff = (pathToFile1, pathToFile2, format) => {
   const parseBefore = getParseFile(beforeConfig.format, beforeConfig.data);
   const parseAfter = getParseFile(afterConfig.format, afterConfig.data);
 
-  const diffTree = makeAstTree(parseBefore, parseAfter);
+  const diffTree = makeAst(parseBefore, parseAfter);
   const result = render(diffTree, format);
 
   return result;
