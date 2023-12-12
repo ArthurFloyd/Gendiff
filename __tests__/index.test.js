@@ -11,8 +11,8 @@ describe('gendiff', () => {
   const plainTestResult = fs.readFileSync(path.join(__dirname, '__fixtures__', 'plainTestResult.txt'), 'utf8');
   const jsonTestResult = fs.readFileSync(path.join(__dirname, '__fixtures__', 'jsonTestResult.txt'), 'utf8');
   describe.each(extention)('compare two %s files', (ext) => {
-    const before = path.join(__dirname, '__fixtures__', `/before.${ext}`);
-    const after = path.join(__dirname, '__fixtures__', `/after.${ext}`);
+    const before = path.join(__dirname, '__fixtures__', `before.${ext}`);
+    const after = path.join(__dirname, '__fixtures__', `after.${ext}`);
     const expected = genDiff(before, after);
 
     test('stylish', () => {

@@ -34,7 +34,7 @@ const makeAst = (beforeConfig, afterConfig) => {
 };
 
 const makeFileData = (pathToFile) => {
-  const data = fs.readFileSync(path.resolve(cwd(), '__tests__/__fixtures__', pathToFile));
+  const data = fs.readFileSync(path.resolve(cwd(), '__tests__', '__fixtures__', pathToFile));
   const format = _.trim(path.extname(pathToFile), '.');
 
   return { data, format };
