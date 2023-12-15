@@ -4,29 +4,31 @@ import fs from 'fs';
 import genDiff from '../src/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const extention = ['json', 'yml'];
+
+const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
+
+const cases = [
+  ['before.json', 'after.json', 'stylishTestResult.txt'],
+  ['before.yml', 'after.yml', 'stylishTestResult.txt'],
+  ['before.json', 'after.json', 'plainTestResult.txt', 'plain'],
+  ['before.yml', 'after.yml', 'plainTestResult.txt', 'plain'],
+  ['before.json', 'after.json', 'jsonTestResult.txt', 'json'],
+  ['before.yml', 'after.yml', 'jsonTestResult.txt', 'json'],
+];
 
 describe('gendiff', () => {
-  const stylishTestResult = fs.readFileSync(path.join(__dirname, '__fixtures__', 'stylishTestResult.txt'), 'utf8');
-  const plainTestResult = fs.readFileSync(path.join(__dirname, '__fixtures__', 'plainTestResult.txt'), 'utf8');
-  const jsonTestResult = fs.readFileSync(path.join(__dirname, '__fixtures__', 'jsonTestResult.txt'), 'utf8');
-  describe.each(extention)('compare two %s files', (ext) => {
-    const before = path.join(__dirname, '__fixtures__', `before.${ext}`);
-    const after = path.join(__dirname, '__fixtures__', `after.${ext}`);
-    const expected = genDiff(before, after);
+  describe.each(cases)(
+    'Compare %s and %s to expect %s in "%s" style',
+    (beforeConfig, afterConfig, result, format) => {
+      const before = getFixturePath(beforeConfig);
+      const after = getFixturePath(afterConfig);
+      const expected = readFile(result);
+      const diff = genDiff(before, after, format);
 
-    test('stylish', () => {
-      expect(expected).toBe(stylishTestResult);
-    });
-
-    test('plain', () => {
-      expect(genDiff(before, after, 'plain'))
-        .toBe(plainTestResult);
-    });
-
-    test('json', () => {
-      expect(genDiff(before, after, 'json'))
-        .toBe(jsonTestResult);
-    });
-  });
+      test('compare two files', () => {
+        expect(diff).toBe(expected);
+      });
+    },
+  );
 });

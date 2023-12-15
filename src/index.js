@@ -22,19 +22,18 @@ const makeAst = (beforeConfig, afterConfig) => {
     if (_.isObject(oldValue) && _.isObject(newValue)) {
       return { key, status: 'nested', children: makeAst(oldValue, newValue) };
     }
-    const modifiedNode = {
+    return {
       key,
       status: 'changed',
       oldValue,
       newValue,
     };
-    return modifiedNode;
   });
   return result;
 };
 
 const makeFileData = (pathToFile) => {
-  const data = fs.readFileSync(path.resolve(cwd(), '__tests__', '__fixtures__', pathToFile));
+  const data = fs.readFileSync(path.resolve(cwd(), pathToFile));
   const format = _.trim(path.extname(pathToFile), '.');
 
   return { data, format };
