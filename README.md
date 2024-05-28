@@ -285,7 +285,7 @@ Compares two configuration files and shows a difference.
 
 __Operating system:__ macOC Ventura 13.2
 
-__Node.js:__ v20.3.1
+__Node.js:__ >= 20.3.1
 
 ### Usage
 ```
