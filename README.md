@@ -272,7 +272,9 @@ JSON format:
 Fist you need to build app with:
 ```
 make install
+```
 
+```
 npm link
 ```
 
