@@ -285,7 +285,7 @@ Compares two configuration files and shows a difference.
 
 ### Minimum system requirements
 
-__Operating system:__ macOC Ventura 13.2
+__Operating system:__ macOC Ventura v 13.2
 
 __Node.js:__ v 20.3.1
 
